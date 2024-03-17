@@ -1,10 +1,5 @@
-from src.cloud import SparkGCP, StorageGCP
-from src.config import (
-    PROJECT_ID,
-    CLOUD_STORAGE,
-    SERVICE_PRINCIPAL_JSON,
-    DATASET,
-)
+from src.config import CLOUD_STORAGE, DATASET
+from src.spark_init import ConfigGCP
 
 
 READ_PATH = "ingestion"
@@ -13,11 +8,7 @@ WRITE_PATH = "datalake/bronze"
 
 def main():
     # Set the spark configuration
-    gcp_storage = StorageGCP(PROJECT_ID, CLOUD_STORAGE)
-    spark = SparkGCP(
-        gcp_storage=gcp_storage,
-        service_principal_json_name=SERVICE_PRINCIPAL_JSON,
-    ).spark
+    spark = ConfigGCP.spark
 
     for data in DATASET:
         file_name = f"{data['name']}.{data['file_type']}"

@@ -1,2 +1,2 @@
-from .spark_session import SparkGCP, SparkDefault
-from .storage import StorageGCP
+from .spark_session import Spark, SparkDefault, SparkGCP
+from .storage import Storage, StorageGCP

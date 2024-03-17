@@ -1,16 +1,6 @@
-from src.cloud import SparkGCP, StorageGCP
-from config.config import (
-    PROJECT_ID,
-    CLOUD_STORAGE,
-    SERVICE_PRINCIPAL_JSON,
-    DATASET,
-)
-from src.config.silver import (
-    FILTER,
-    DROP_COLS,
-    RENAME_COLS,
-    JOINS,
-)
+from src.config import CLOUD_STORAGE, DATASET
+from src.config.silver import FILTER, DROP_COLS, RENAME_COLS, JOINS
+from src.spark_init import ConfigGCP
 
 
 READ_PATH = "datalake/bronze"
@@ -19,11 +9,7 @@ WRITE_PATH = "datalake/silver"
 
 def main():
     # Set the spark configuration
-    gcp_storage = StorageGCP(PROJECT_ID, CLOUD_STORAGE)
-    spark = SparkGCP(
-        gcp_storage=gcp_storage,
-        service_principal_json_name=SERVICE_PRINCIPAL_JSON,
-    ).spark
+    spark = ConfigGCP.spark
 
     dfs = {}
     for data in DATASET:
