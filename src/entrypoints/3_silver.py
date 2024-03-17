@@ -1,5 +1,3 @@
-from pyspark.sql import DataFrame
-
 from src.cloud import SparkGCP, StorageGCP
 from config.config import (
     PROJECT_ID,
@@ -27,7 +25,7 @@ if __name__ == "__main__":
         service_principal_json_name=SERVICE_PRINCIPAL_JSON,
     ).spark
 
-    dfs: dict[str, DataFrame] = {}
+    dfs = {}
     for data in DATASET:
         table = data["name"]
         # Read data from the bronze layer
