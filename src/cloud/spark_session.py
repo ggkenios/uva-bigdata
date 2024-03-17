@@ -6,7 +6,7 @@ from pyspark.sql import SparkSession
 import shutil
 from urllib.request import urlretrieve
 
-from .storage import StorageGCP
+from .storage import Storage
 
 
 class Spark(ABC):
@@ -44,7 +44,7 @@ class Spark(ABC):
 
 
 class SparkGCP(Spark):
-    def __init__(self, gcp_storage: StorageGCP, service_principal_json_name: str):
+    def __init__(self, gcp_storage: Storage, service_principal_json_name: str):
         super().__init__(
             gcp_storage=gcp_storage, 
             service_principal_json_name=service_principal_json_name,
@@ -70,7 +70,7 @@ class SparkGCP(Spark):
 
     @staticmethod
     def _authenticate(
-        gcp_storage: StorageGCP, 
+        gcp_storage: Storage, 
         service_principal_json_name: str,
     ) -> None: 
         # Download the service principal json
