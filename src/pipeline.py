@@ -1,13 +1,7 @@
-from src.entrypoints import (
-    ingest,
-    bronze,
-    silver,
-    gold,
-)
+from src.entrypoints import ingest, bronze, silver, gold
 
 
 if __name__ == "__main__":
-    ingest.main()
-    bronze.main()
-    silver.main()
-    gold.main()
+    for module in [ingest, bronze, silver, gold]:
+        module.main()
+        print(f"Module '{module.__name__}' executed successfully")
