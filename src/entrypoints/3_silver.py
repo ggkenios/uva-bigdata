@@ -49,7 +49,7 @@ if __name__ == "__main__":
             on=join["on"],
             how=join["how"],
         )
-    
+
     df = (
         dfs[join["left"]]
         .distinct()
