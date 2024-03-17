@@ -1,5 +1,4 @@
-from src.cloud.spark_session import SparkGCP
-from src.cloud.storage import StorageGCP
+from src.cloud import SparkGCP, StorageGCP
 from src.config import (
     PROJECT_ID,
     CLOUD_STORAGE,
@@ -7,7 +6,7 @@ from src.config import (
     DATASET,
 )
 
-# Paths
+
 READ_PATH = "ingestion"
 WRITE_PATH = "datalake/bronze"
 

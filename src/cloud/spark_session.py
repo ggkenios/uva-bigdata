@@ -49,6 +49,21 @@ class Spark(ABC):
         self.spark = self._spark_session(self.sc)
 
 
+class SparkDefault(Spark):
+    def __init__(self):
+        super().__init__()
+
+    @staticmethod
+    def _get_connector() -> None:
+        """Empty method."""
+        pass
+
+    @staticmethod
+    def _authenticate() -> None:
+        """Empty method."""
+        pass
+
+
 class SparkGCP(Spark):
     def __init__(self, gcp_storage: Storage, service_principal_json_name: str):
         """

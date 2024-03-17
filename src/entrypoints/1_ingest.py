@@ -1,4 +1,4 @@
-from src.cloud.storage import StorageGCP
+from src.cloud import StorageGCP
 from src.config import (
     CLOUD_STORAGE,
     DATASET,
