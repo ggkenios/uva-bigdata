@@ -17,25 +17,31 @@ class Spark(ABC):
 
     @staticmethod
     def _set_spark_home() -> None:
+        """Sets the SPARK_HOME environment variable."""
         findspark.init()
 
     @abstractmethod
     def _get_connector() -> None:
+        """Downloads the connectors for the cloud provider's storage."""
         raise NotImplementedError
 
     @abstractmethod
     def _authenticate(*args, **kwargs) -> None:
+        """Authenticates the cloud provider's storage."""
         raise NotImplementedError
 
     @staticmethod
     def _spark_context() -> SparkContext:
+        """Creates a spark context object."""
         return SparkContext(conf=SparkConf())
 
     @staticmethod
     def _spark_session(sc: SparkContext) -> SparkSession:
+        """Creates a spark session object."""
         return SparkSession(sc)
 
     def main(self, *args, **kwargs):
+        """Main method to be called by the constructor."""
         self._set_spark_home()
         self._get_connector()
         self._authenticate(*args, **kwargs)
@@ -45,6 +51,12 @@ class Spark(ABC):
 
 class SparkGCP(Spark):
     def __init__(self, gcp_storage: Storage, service_principal_json_name: str):
+        """
+        Args:
+            gcp_storage: GCP storage object.
+            service_principal_json_name: Name of the service principal json file
+                                         in the GCP storage.
+        """
         super().__init__(
             gcp_storage=gcp_storage, 
             service_principal_json_name=service_principal_json_name,
@@ -52,6 +64,12 @@ class SparkGCP(Spark):
 
     @staticmethod
     def _get_connector() -> None:
+        """Gets GCS connector for spark and copies it in $SPARK_HOME/jars.
+        
+        The GCS connector is required to read and write data from GCS.
+        The connector is downloaded from the official GCS connector repository.
+        And then it is copied to the $SPARK_HOME/jars directory.
+        """
         connector_url = "https://storage.googleapis.com/hadoop-lib/gcs/gcs-connector-hadoop3-latest.jar"
         # Download the GCS connector for spark
         file_name = connector_url.split("/")[-1]
@@ -72,7 +90,17 @@ class SparkGCP(Spark):
     def _authenticate(
         gcp_storage: Storage, 
         service_principal_json_name: str,
-    ) -> None: 
+    ) -> None:
+        """Authenticates to GCP using the service principal json.
+        
+        The service principal json is downloaded from GCS and is set as an
+        environment variable GOOGLE_APPLICATION_CREDENTIALS.
+
+        Args:
+            gcp_storage: GCP storage object.
+            service_principal_json_name: Name of the service principal json file
+                                         in the GCP storage.
+        """
         # Download the service principal json
         gcp_storage.download(
             blob_name=service_principal_json_name,
