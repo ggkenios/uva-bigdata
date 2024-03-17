@@ -1,3 +1,5 @@
+from pyspark.sql import DataFrame
+
 from src.config import CLOUD_STORAGE, DATASET
 from src.config.silver import FILTER, DROP_COLS, RENAME_COLS, JOINS
 from src.spark_init import ConfigGCP
@@ -11,7 +13,7 @@ def main():
     # Set the spark configuration
     spark = ConfigGCP.spark
 
-    dfs = {}
+    dfs: dict[str, DataFrame] = {}
     for data in DATASET:
         table = data["name"]
         # Read data from the bronze layer
