@@ -1,0 +1,7 @@
+# Service principal
+*.json
+
+# VS Code
+__pycache__
+.vscode
+
