@@ -9,7 +9,7 @@ from src.config import (
 WRITE_PATH = "ingestion"
 
 
-if __name__ == "__main__":
+def main():
     # Instantiate the GCP storage
     gcp_storage = StorageGCP(PROJECT_ID, CLOUD_STORAGE)
     # Upload the data from the APIs
@@ -18,3 +18,6 @@ if __name__ == "__main__":
             blob_name=f"{WRITE_PATH}/{data['name']}.{data['file_type']}",
             url=data["url"],
         )
+
+if __name__ == "__main__":
+    main()

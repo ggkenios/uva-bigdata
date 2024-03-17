@@ -17,7 +17,7 @@ READ_PATH = "datalake/bronze"
 WRITE_PATH = "datalake/silver"
 
 
-if __name__ == "__main__":
+def main():
     # Set the spark configuration
     gcp_storage = StorageGCP(PROJECT_ID, CLOUD_STORAGE)
     spark = SparkGCP(
@@ -61,3 +61,6 @@ if __name__ == "__main__":
         path=f"gs://{CLOUD_STORAGE}/{WRITE_PATH}",
         mode="overwrite",
     )
+
+if __name__ == "__main__":
+    main()
