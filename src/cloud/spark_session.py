@@ -9,6 +9,8 @@ from urllib.request import urlretrieve
 from .storage import Storage
 
 
+FIRST_RUN = False
+
 class Spark(ABC):
     def __init__(self, *args, **kwargs):
         self.sc = None
@@ -43,7 +45,8 @@ class Spark(ABC):
     def main(self, *args, **kwargs):
         """Main method to be called by the constructor."""
         self._set_spark_home()
-        self._get_connector()
+        if FIRST_RUN:
+            self._get_connector()
         self._authenticate(*args, **kwargs)
         self.sc = self._spark_context()
         self.spark = self._spark_session(self.sc)
@@ -99,7 +102,7 @@ class SparkGCP(Spark):
         if os.path.exists(destination_file):
             # Remove the file if it exists
             os.remove(destination_file)
-        shutil.move(file_name, f"{spark_home}/jars", copy_function=shutil.copy)
+        shutil.move(file_name, directory, copy_function=shutil.copy)
 
     @staticmethod
     def _authenticate(
@@ -116,11 +119,12 @@ class SparkGCP(Spark):
             service_principal_json_name: Name of the service principal json file
                                          in the GCP storage.
         """
-        # Download the service principal json
-        gcp_storage.download(
-            blob_name=service_principal_json_name,
-            file_path=service_principal_json_name,
-        )
+        if FIRST_RUN:
+            # Download the service principal json
+            gcp_storage.download(
+                blob_name=service_principal_json_name,
+                file_path=service_principal_json_name,
+            )
         # Set the environment variable
         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
             f"{os.getcwd()}\{service_principal_json_name}"

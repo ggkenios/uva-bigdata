@@ -11,8 +11,8 @@ DATASET = [
         "file_type": "csv",
     },
     {
-        "name": "education",
-        "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/3.0/data/dataflow/ESTAT/EDAT_LFSE_03/1.0?compress=false&format=csvdata&formatVersion=2.0&returnLastUpdateDate=true",
+        "name": "crime",
+        "url": "https://ec.europa.eu/eurostat/api/dissemination/sdmx/3.0/data/dataflow/ESTAT/CRIM_OFF_CAT/1.0?compress=false&format=csvdata&formatVersion=2.0&returnLastUpdateDate=true",
         "file_type": "csv",
     },
     {

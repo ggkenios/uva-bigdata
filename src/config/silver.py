@@ -1,12 +1,10 @@
 FILTER = {
-    "unemployment": [
-        "age == 'Y15-64'", # The common age range value for both dataframes
-    ],
-    "education": [
-        "age == 'Y15-64'", # The common age range value for both dataframes
+    "unemployment": [],
+    "crime": [
+        "iccs == 'ICCS03012'", # The code for sexual asault
     ],
     "pay_gap": [
-        "nace_r2 == 'B-S_X_O'",
+        "nace_r2 == 'B-S_X_O'", # Aggreagated sectors
     ],
 }
 
@@ -16,16 +14,16 @@ DROP_COLS = {
         "STRUCTURE_ID",
         "freq", # Only one unique value ("A")
         "unit", # Only one unique value ("PC")
-        "age", # Drop after filtering
+        "age",
         "OBS_FLAG",
         "LAST UPDATE",
     ],
-    "education": [
+    "crime": [
         "STRUCTURE",
         "STRUCTURE_ID",
         "freq", # Only one unique value ("A")
         "unit", # Only one unique value ("PC")
-        "age", # Drop after filtering
+        "iccs", # Drop after filtering
         "OBS_FLAG",
         "LAST UPDATE",
     ],
@@ -46,23 +44,23 @@ RENAME_COLS = {
         "TIME_PERIOD": "year",
         "OBS_VALUE": "unemployment_rate",
     },
-    "education": {
+    "crime": {
         "geo": "country",
         "TIME_PERIOD": "year",
-        "OBS_VALUE": "population_rate",
+        "OBS_VALUE": "crime_rate_per_100k",
     },
     "pay_gap": {
         "geo": "country",
         "TIME_PERIOD": "year",
         "OBS_VALUE": "pay_gap_rate",
     },
-}  
+}
 
 JOINS = [
     {
         "left": "unemployment",
-        "right": "education",
-        "on": ["sex", "isced11", "country", "year"],
+        "right": "crime",
+        "on": ["country", "year"],
         "how": "left",
     },
     {

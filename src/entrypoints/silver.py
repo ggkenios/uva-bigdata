@@ -30,6 +30,12 @@ def main():
         for old, new in RENAME_COLS[table].items():
             dfs[table] = dfs[table].withColumnRenamed(old, new)
 
+        # Write each table to the silver layer
+        dfs[table].write.parquet(
+            path=f"gs://{CLOUD_STORAGE}/{WRITE_PATH}/{table}",
+            mode="overwrite",
+        )
+
     # Perform joins
     for join in JOINS:
         dfs[join["left"]] = dfs[join["left"]].join(
@@ -41,12 +47,12 @@ def main():
     df = (
         dfs[join["left"]]
         .distinct()
-        .na.drop()
+        #.na.drop()
     )
 
     # Write data to the silver layer
     df.write.parquet(
-        path=f"gs://{CLOUD_STORAGE}/{WRITE_PATH}",
+        path=f"gs://{CLOUD_STORAGE}/{WRITE_PATH}/joined",
         mode="overwrite",
     )
 
