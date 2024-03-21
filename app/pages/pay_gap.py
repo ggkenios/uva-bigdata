@@ -11,6 +11,7 @@ WIDTH = 900
 HEIGHT = 800
 
 
+@st.cache_data
 def pay_gap_page():
     st.title("Pay Gap Rate by Country")
 
@@ -32,11 +33,11 @@ def pay_gap_page():
         locations=geo_df.index,
         color="pay_gap_rate",
         range_color=(geo_df["pay_gap_rate"].min(), geo_df["pay_gap_rate"].max()),
-        height=HEIGHT,
-        width=WIDTH,
+        #height=HEIGHT,
+        #width=WIDTH,
     )
     fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(width=WIDTH, height=HEIGHT)
+    #fig.update_layout(width=WIDTH, height=HEIGHT)
     st.plotly_chart(fig, use_container_width=True) #  width=WIDTH, height=HEIGHT)
 
 
