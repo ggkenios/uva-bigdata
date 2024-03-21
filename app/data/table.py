@@ -6,3 +6,5 @@ df = read_parquet_from_gcs(
     bucket_name=CLOUD_STORAGE, 
     file_name="datalake/gold/unemployment_crime_pay_gap"
 )
+
+unique_years = sorted(df["year"].unique(), reverse=True)
