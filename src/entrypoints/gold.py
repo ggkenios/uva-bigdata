@@ -27,7 +27,7 @@ def main():
     # Remove NA values
     df = df.dropna()
 
-    # Cache the group by country count
+    # Cache the grouBy country count
     df_country_count = (
         df
         .groupBy("country")
