@@ -15,7 +15,6 @@ DROP_COLS = {
         "STRUCTURE_ID",
         "freq", # Only one unique value ("A")
         "unit", # Only one unique value ("PC")
-        #"age",
         "OBS_FLAG",
         "LAST UPDATE",
     ],
