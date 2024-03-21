@@ -1,5 +1,5 @@
 from src.config import CLOUD_STORAGE, DATASET
-from src.spark_init import ConfigGCP
+from src.spark_init import SparkInit
 
 
 READ_PATH = "ingestion"
@@ -8,7 +8,7 @@ WRITE_PATH = "datalake/bronze"
 
 def main():
     # Set the spark configuration
-    spark = ConfigGCP.spark
+    spark = SparkInit.spark
 
     for data in DATASET:
         file_name = f"{data['name']}.{data['file_type']}"

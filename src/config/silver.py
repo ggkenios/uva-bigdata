@@ -2,6 +2,7 @@ FILTER = {
     "unemployment": [],
     "crime": [
         "iccs == 'ICCS03012'", # The code for sexual asault
+        "unit == 'P_HTHAB'", # Per 100k inhabitants (rate instead of flat number)
     ],
     "pay_gap": [
         "nace_r2 == 'B-S_X_O'", # Aggreagated sectors
@@ -14,7 +15,7 @@ DROP_COLS = {
         "STRUCTURE_ID",
         "freq", # Only one unique value ("A")
         "unit", # Only one unique value ("PC")
-        "age",
+        #"age",
         "OBS_FLAG",
         "LAST UPDATE",
     ],
@@ -61,7 +62,7 @@ JOINS = [
         "left": "unemployment",
         "right": "crime",
         "on": ["country", "year"],
-        "how": "left",
+        "how": "inner",
     },
     {
         "left": "unemployment",

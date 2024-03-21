@@ -1,17 +1,18 @@
 from pyspark.sql import DataFrame
+from pyspark.sql import functions as F
 
 from src.config import CLOUD_STORAGE, DATASET
 from src.config.silver import FILTER, DROP_COLS, RENAME_COLS, JOINS
-from src.spark_init import ConfigGCP
+from src.spark_init import SparkInit
 
 
 READ_PATH = "datalake/bronze"
-WRITE_PATH = "datalake/silver"
+WRITE_PATH = "datalake/silver/unemployment_crime_pay_gap"
 
 
 def main():
     # Set the spark configuration
-    spark = ConfigGCP.spark
+    spark = SparkInit.spark
 
     dfs: dict[str, DataFrame] = {}
     for data in DATASET:
@@ -30,31 +31,28 @@ def main():
         for old, new in RENAME_COLS[table].items():
             dfs[table] = dfs[table].withColumnRenamed(old, new)
 
-        # Write each table to the silver layer
-        dfs[table].write.parquet(
-            path=f"gs://{CLOUD_STORAGE}/{WRITE_PATH}/{table}",
-            mode="overwrite",
-        )
-
     # Perform joins
     for join in JOINS:
         dfs[join["left"]] = dfs[join["left"]].join(
-            other=dfs[join["right"]],
+            other=F.broadcast(dfs[join["right"]]),
             on=join["on"],
             how=join["how"],
         )
 
+    # Select distinct rows
     df = (
         dfs[join["left"]]
         .distinct()
-        #.na.drop()
     )
 
     # Write data to the silver layer
     df.write.parquet(
-        path=f"gs://{CLOUD_STORAGE}/{WRITE_PATH}/joined",
+        path=f"gs://{CLOUD_STORAGE}/{WRITE_PATH}",
         mode="overwrite",
     )
+
+    print(df.count())
+
 
 if __name__ == "__main__":
     main()

@@ -6,16 +6,15 @@ from pyspark.sql import SparkSession
 import shutil
 from urllib.request import urlretrieve
 
-from .storage import Storage
+from src.cloud.storage import Storage
+from src.config import INITIAL_RUN
 
-
-FIRST_RUN = False
 
 class Spark(ABC):
     def __init__(self, *args, **kwargs):
         self.sc = None
         self.spark = None
-        self.main( *args, **kwargs)
+        self.initialize( *args, **kwargs)
 
     @staticmethod
     def _set_spark_home() -> None:
@@ -42,11 +41,10 @@ class Spark(ABC):
         """Creates a spark session object."""
         return SparkSession(sc)
 
-    def main(self, *args, **kwargs):
+    def initialize(self, *args, **kwargs):
         """Main method to be called by the constructor."""
         self._set_spark_home()
-        if FIRST_RUN:
-            self._get_connector()
+        if INITIAL_RUN: self._get_connector()
         self._authenticate(*args, **kwargs)
         self.sc = self._spark_context()
         self.spark = self._spark_session(self.sc)
@@ -119,7 +117,7 @@ class SparkGCP(Spark):
             service_principal_json_name: Name of the service principal json file
                                          in the GCP storage.
         """
-        if FIRST_RUN:
+        if INITIAL_RUN:
             # Download the service principal json
             gcp_storage.download(
                 blob_name=service_principal_json_name,
