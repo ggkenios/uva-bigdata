@@ -51,8 +51,6 @@ def main():
         mode="overwrite",
     )
 
-    print(df.count())
-
 
 if __name__ == "__main__":
     main()
