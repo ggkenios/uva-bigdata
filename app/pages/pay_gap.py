@@ -30,14 +30,14 @@ def pay_gap_page():
         geo_df,
         geojson=geo_df.geometry,
         locations=geo_df.index,
-        color="pay_gap_rate",  # Replace with your data column for coloring countries
+        color="pay_gap_rate",
         range_color=(geo_df["pay_gap_rate"].min(), geo_df["pay_gap_rate"].max()),
         height=HEIGHT,
         width=WIDTH,
     )
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(width=WIDTH, height=HEIGHT)
-    st.plotly_chart(fig, width=WIDTH, height=HEIGHT)
+    st.plotly_chart(fig, use_container_width=True) #  width=WIDTH, height=HEIGHT)
 
 
 if __name__ == "__main__":
